@@ -53,7 +53,7 @@ class _BookmarkBottomSheetState extends State<BookmarkBottomSheet> {
               return GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
-                  widget.onGoToPage(page+1);
+                  widget.onGoToPage(page);
                 },
                 child: Card(
                   elevation: 5,
@@ -61,7 +61,7 @@ class _BookmarkBottomSheetState extends State<BookmarkBottomSheet> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text("বইয়ের পৃষ্ঠা নাম্বার: ${page + 1}"),
+                      Text("বইয়ের পৃষ্ঠা নাম্বার: ${page+1}"),
                       IconButton(
                         onPressed: () => _deleteBookmark(index),
                         icon: Icon(Icons.delete),

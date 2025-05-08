@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.push(context, MaterialPageRoute(builder: (_) => AuthorWordsScreen()));
                         } else {
                          // Navigator.push(context, MaterialPageRoute(builder: (_) => ShowScreen(selectedIndex: index)));
-                          Navigator.push(context, MaterialPageRoute(builder: (_) => ShowPdfScreen(pageNum: index,)));
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => ShowPdfScreen()));
                         }
 
                       },

@@ -5,11 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../widget/alert_dialog.dart';
 import '../widget/show_dialog.dart';
 
 class ShowPdfScreen extends StatefulWidget {
-  final int pageNum;
-  const ShowPdfScreen({super.key, required this.pageNum});
+  final int initialPage;
+  const ShowPdfScreen({super.key,this.initialPage = 0});
 
   @override
   State<ShowPdfScreen> createState() => _ShowPdfScreenState();
@@ -22,6 +23,7 @@ class _ShowPdfScreenState extends State<ShowPdfScreen> {
   String? _filePath;
   bool _isReady = false;
   final List<int> _bookmarkedPages = [];
+  bool nightMood=false;
   final TextEditingController _pageSearchController = TextEditingController();
 
   @override
@@ -29,6 +31,7 @@ class _ShowPdfScreenState extends State<ShowPdfScreen> {
     super.initState();
     _loadPdfFromAssets();
     _loadBookmarks();
+    _loadNightMood();
   }
 
   Future<void> _loadPdfFromAssets() async {
@@ -42,17 +45,33 @@ class _ShowPdfScreenState extends State<ShowPdfScreen> {
   }
 
   void _goToPage(int pageNum) {
-    if (_pdfViewController != null && pageNum >= 0 && pageNum < _totalPages) {
-      _pdfViewController!.setPage(pageNum);
-      setState(() {
-        _currentPage = pageNum;
+    if (_pdfViewController == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('PDF লোড হচ্ছে, একটু অপেক্ষা করুন।')),
+      );
+      return;
+    }
+
+    if (_totalPages == 0) {
+      // এখনও render হয়নি, তাই render শেষে navigate করো
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Future.delayed(Duration(milliseconds: 300), () {
+          if (_pdfViewController != null) {
+            _pdfViewController!.setPage(pageNum);
+           // print('pageNum (delayed): ${pageNum+1}');
+          }
+        });
       });
+    } else if (pageNum >= 0 && pageNum < _totalPages) {
+      _pdfViewController!.setPage(pageNum);
+     // print('pageNum: $pageNum');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('দুঃখিত, এই নাম্বারের কোন পেইজ নেই।')),
       );
     }
   }
+
 
   void _toggleBookmark() {
     setState(() {
@@ -67,7 +86,6 @@ class _ShowPdfScreenState extends State<ShowPdfScreen> {
 
   Future<void> _saveBookmarks() async {
     final prefs = await SharedPreferences.getInstance();
-    // Int list → String list
     List<String> stringList = _bookmarkedPages.map((e) => e.toString()).toList();
     await prefs.setStringList('bookmarkedPages', stringList);
   }
@@ -84,11 +102,25 @@ class _ShowPdfScreenState extends State<ShowPdfScreen> {
     }
   }
 
+  void _toggleNightMode() async {
+    setState(() {
+      nightMood = !nightMood;
+    });
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('nightMood', nightMood);
+  }
+
+
+  Future<void> _loadNightMood() async {
+    final prefs = await SharedPreferences.getInstance();
+    nightMood = prefs.getBool('nightMood') ?? false;
+  }
+
+
 
 
   @override
   void dispose() {
-    _pdfViewController = null;
     _pageSearchController.dispose();
     super.dispose();
   }
@@ -96,21 +128,35 @@ class _ShowPdfScreenState extends State<ShowPdfScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('এসো ঈমান শিখি', style: TextStyle(color: Colors.black)),
-        backgroundColor: Colors.white,
+        backgroundColor: nightMood ? Colors.black : Colors.white,
+        iconTheme: IconThemeData(
+          color: nightMood ? Colors.white : Colors.black,
+        ),
         actions: [
+          /*IconButton(
+            icon: Icon(
+              nightMood ? Icons.nightlight_outlined
+                  : Icons.nightlight,
+              color: nightMood ? Colors.white : Colors.black,
+            ),
+            onPressed: (){
+              _toggleNightMode();
+            },
+          ),*/
           IconButton(
             icon: Icon(
               _bookmarkedPages.contains(_currentPage)
                   ? Icons.bookmark
                   : Icons.bookmark_border,
-              color: Colors.black,
+                color: nightMood ? Colors.white : Colors.black,
             ),
             onPressed: _toggleBookmark,
           ),
           IconButton(
-            icon: Icon(Icons.list, color: Colors.black),
+            icon: Icon(Icons.list,
+              color: nightMood ? Colors.white : Colors.black,),
             onPressed: () {
               showModalBottomSheet(
                 context: context,
@@ -133,41 +179,21 @@ class _ShowPdfScreenState extends State<ShowPdfScreen> {
             },
           ),
           IconButton(
-            icon: Icon(Icons.search, color: Colors.black),
+            icon: Icon(Icons.search, color: nightMood ? Colors.white : Colors.black,),
             onPressed: () {
               showDialog(
                 context: context,
-                builder: (_) => AlertDialog(
-                  title: Text("পৃষ্ঠা খুঁজুন",style: TextStyle(fontWeight: FontWeight.bold),),
-                  content: TextField(
-                    controller: _pageSearchController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      iconColor: Colors.white,
-                        hintText: "বইয়ের পৃষ্ঠা সংখ্যা ১-১৯২",
-                        hintStyle: TextStyle(color: Colors.black12,fontSize: 16),
-
-                    ),
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        int? page = int.tryParse(_pageSearchController.text);
-                        if (page != null) {
-                          Navigator.pop(context);
-                          _goToPage(page-1);
-                        }
-                        _pageSearchController.clear();
-                      },
-                      child: Text("সার্চ করুন"),
-                    ),
-                  ],
-                ),
+                builder: (_) => AlertDialogs(
+                  onGoToPage: (int page) {
+                    _goToPage(page);
+                  },
+                  pageSearchController: _pageSearchController,),
               );
             },
           ),
         ],
       ),
+
       body: _filePath == null
           ? Center(child: CircularProgressIndicator())
           : Stack(
@@ -179,12 +205,20 @@ class _ShowPdfScreenState extends State<ShowPdfScreen> {
                 autoSpacing: false,
                 pageFling: false,
                 onRender: (pages){
-                  _totalPages = pages!;
-                  _isReady = true;
+                  setState(() {
+                    _totalPages = pages!;
+                    _isReady = true;
+                  });
+                  // Move to the desired initial page after rendering is complete
+                  if (_pdfViewController != null) {
+                    _pdfViewController!.setPage(widget.initialPage);
+                    print('Navigated to initialPage: ${widget.initialPage}');
+                  }
                 },
                 onViewCreated: (controller) {
                   _pdfViewController = controller;
-                  _goToPage(widget.pageNum);
+                  _goToPage(widget.initialPage);
+                  print('pageInit:${widget.initialPage}');
                 },
                 onPageChanged: (page, total) {
                   setState(() {
