@@ -1,9 +1,16 @@
 import 'package:esho_eman_shikhi/screen/HomePage.dart';
-import 'package:esho_eman_shikhi/screen/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ScreenUtilInit(
+    designSize: Size(360, 690),
+    minTextAdapt: true,
+    splitScreenMode: true,
+    builder: (context,child)=>MyApp(),
+  ));
+ // runApp(const MyApp());
+//  runApp(DevicePreview(builder: (context) => MyApp(),));
 }
 
 class MyApp extends StatelessWidget {

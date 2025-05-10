@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BookmarkBottomSheet extends StatefulWidget {
   final List<int> bookmarkedPages;
@@ -61,7 +62,7 @@ class _BookmarkBottomSheetState extends State<BookmarkBottomSheet> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text("বইয়ের পৃষ্ঠা নাম্বার: ${page+1}"),
+                      Text("বইয়ের পৃষ্ঠা নাম্বার: ${page+1}",style: TextStyle(fontSize: 20.sp,fontWeight: FontWeight.bold),),
                       IconButton(
                         onPressed: () => _deleteBookmark(index),
                         icon: Icon(Icons.delete),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'showpdf_screen.dart';
 
@@ -62,7 +63,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Text("বইয়ের পৃষ্ঠা নাম্বার: ${page + 1}"),
+                    Text("বইয়ের পৃষ্ঠা নাম্বার: ${page + 1}",style: TextStyle(fontSize: 20.sp,fontWeight: FontWeight.bold)),
                     IconButton(
                       onPressed: () => _deleteBookmark(page),
                       icon: const Icon(Icons.delete),
