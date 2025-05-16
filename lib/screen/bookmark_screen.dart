@@ -38,6 +38,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -45,7 +46,8 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
           title: const Text('বুকমার্ক তালিকা',style: TextStyle(fontWeight:FontWeight.bold ),),
           centerTitle: true,
       ),
-      body: ListView(
+      body: _bookmarks.isEmpty ?  Center(child: Text('বইয়ের পৃষ্ঠা বুকমার্ক করা নেই।',style: TextStyle(fontSize: 20.sp),)):
+      ListView(
         children: [
           ..._bookmarks.map((page) {
             return GestureDetector(

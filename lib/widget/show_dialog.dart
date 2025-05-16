@@ -38,7 +38,22 @@ class _BookmarkBottomSheetState extends State<BookmarkBottomSheet> {
     return SafeArea(
       child: Container(
         color: Colors.white,
-        child: ListView(
+        child: _localBookmarks.isEmpty ? Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 5),
+            Center(
+              child: Text(
+                'বুকমার্ক তালিকা',
+                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 23),
+              ),
+            ),
+            SizedBox(height: 10),
+            Expanded(child: Center(child: Text('বইয়ের পৃষ্ঠা বুকমার্ক করা নেই।',textAlign: TextAlign.center,style: TextStyle(fontSize: 20.sp),))),
+          ],
+        ) :
+        ListView(
           padding: EdgeInsets.all(16),
           children: [
             Center(

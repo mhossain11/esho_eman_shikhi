@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CommunicationScreen extends StatefulWidget {
@@ -65,8 +66,8 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text('আসসালামু আলাইকুম সম্মানিত পাঠক পাঠিকা আমি এই অ্যাপটি আপনাদের সেবাই তৈরি করেছি, আমি আপ্রাণ চেষ্টা করেছি নিরবিচ্ছিন্ন সেবা দিতে,তারপরও যদি কোন সমস্যা আপনাদের চোখে পড়ে প্লিজ আমাকে জানাবেন আমি সমাধান করবো।',
-                        textAlign: TextAlign.justify,style: TextStyle(fontSize: 16),),
-                      Center(child: Text('ইনশাআল্লাহ।',style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold))),
+                        textAlign: TextAlign.justify,style: TextStyle(fontSize: 16.sp),),
+                      Center(child: Text('ইনশাআল্লাহ।',style: TextStyle(fontSize: 16.sp,fontWeight: FontWeight.bold))),
                       SizedBox(height: 30,),
                       ElevatedButton(
                           onPressed: (){
