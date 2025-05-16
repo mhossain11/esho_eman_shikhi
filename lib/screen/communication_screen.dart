@@ -65,9 +65,8 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text('আসসালামু আলাইকুম সম্মানিত পাঠক পাঠিকা আমি এই অ্যাপটি আপনাদের সেবাই তৈরি করেছি, আমি আপ্রাণ চেষ্টা করেছি নিরবিচ্ছিন্ন সেবা দিতে,তারপরও যদি কোন সমস্যা আপনাদের চোখে পড়ে প্লিজ আমাকে জানাবেন আমি সমাধান করবো।',
+                      Text('আসসালামু আলাইকুম! সম্মানিত পাঠক-পাঠিকা, আমি এই অ্যাপটি আপনাদের সেবায় তৈরি করেছি। আমি সর্বোচ্চ চেষ্টা করেছি নিরবচ্ছিন্ন সেবা দিতে। তারপরও যদি কোন সমস্যা আপনাদের চোখে পড়ে তাহলে অনুরোধ রইলো আমাকে জানাবেন।আমি সমাধান করার আপ্রাণ চেষ্টা করবো। ইনশাআল্লহ।',
                         textAlign: TextAlign.justify,style: TextStyle(fontSize: 16.sp),),
-                      Center(child: Text('ইনশাআল্লাহ।',style: TextStyle(fontSize: 16.sp,fontWeight: FontWeight.bold))),
                       SizedBox(height: 30,),
                       ElevatedButton(
                           onPressed: (){
@@ -81,7 +80,7 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
                           ),
 
 
-                          child: Text('Our Office Facebook Group',style: TextStyle(color: Colors.black),)),
+                          child: Text('Our Office Facebook Page',style: TextStyle(color: Colors.black),)),
                       SizedBox(height: 20,),
                       ElevatedButton(
                           onPressed: (){

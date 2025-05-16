@@ -30,7 +30,13 @@ class AlertDialogs extends StatelessWidget {
             }
             pageSearchController.clear();
           },
-          child: Text("সার্চ করুন"),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.white, // ✅ background color change
+            foregroundColor: Colors.grey,
+            shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          ),
+          child: Text("সার্চ করুন",style: TextStyle(color: Colors.black),),
         ),
       ],
     );
