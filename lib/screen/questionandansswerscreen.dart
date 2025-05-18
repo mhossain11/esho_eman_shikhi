@@ -26,7 +26,7 @@ class QuestionAndAnswerScreen extends StatelessWidget {
               Text('উত্তর: না। এই অ্যাপ ইনেস্টল করার সময় কোন পারমিশন বা অ্যাক্সেস চাইবে না।',style: TextStyle(fontSize: 16),),
               SizedBox(height: 10,),
               Text('প্রশ্ন: এই অ্যাপে কি আছে?',style: TextStyle(fontSize: 16),),
-              Text('উত্তর: এই অ্যাপ এসো ঈমান শিখি একটি বই ।',style: TextStyle(fontSize: 16),),
+              Text('উত্তর: এই অ্যাপ এসো ঈমান শিখি একটি বই।',style: TextStyle(fontSize: 16),),
               SizedBox(height: 10,),
               Text('প্রশ্ন: এই বই গুলো কোথা থেকে পেয়েছেন?',style: TextStyle(fontSize: 16),),
               Text('উত্তর:  বই অনলাইন থেকে নেয়া হয়েছে।',style: TextStyle(fontSize: 16),),
@@ -38,17 +38,8 @@ class QuestionAndAnswerScreen extends StatelessWidget {
               Text('উত্তর:এই অ্যাপ বানিয়েছে ডেভেলপার ফয়সাল। ইসলাম এর সত্য কথা তুলে ধরার জন্য।',style: TextStyle(fontSize: 16),),
               SizedBox(height: 10,),
               Text('প্রশ্ন: এই অ্যাপে কি বিজ্ঞাপন আসবে ?',style: TextStyle(fontSize: 16),),
-              Text('উত্তর:না। এই অ্যাপ এ কোন বিজ্ঞাপন সেট করা হয় নাই।',style: TextStyle(fontSize: 16),),
-              Divider(height: 24),
-              Text(
-                'রইসলামি জীবনাদর্শের মূল ভিত্তি আল-কুরআন এবং দ্বিতীয় ভিত্তি আল-হাদিস। কুরআন জীবন বিধানের মৌলিক নীতিমালা উপস্থাপন করে, আর হাদিস সেই মৌলনীতির আলোকে ব্যাখ্যা-বিশ্লেষণ উপস্থাপন করে। তাই হাদিস হচ্ছে কুরআনের নির্ভুল ব্যাখ্যা, কুরআনের বাহক বিশ্বনবীর হজরত মুহাম্মদ (সঃ) পবিত্র জীবনচরিত, কর্মনীতি ও আদর্শ তথা তাঁর বাণী, কাজ, হেদায়াত ও উপদেশাবলির বিস্তৃত উপস্থাপনা।ইসলামি জীবন-দর্শনে কুরআনের সাথে হাদিসের রয়েছে অপরিসীম গুরুত্ব।',
-                textAlign: TextAlign.justify,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontStyle: FontStyle.italic,
-                  color: Colors.grey[700],
-                ),
-              ),
+              Text('উত্তর: না। এই অ্যাপ এ কোন বিজ্ঞাপন সেট করা হয় নাই।',style: TextStyle(fontSize: 16),),
+
 
             ],
           ),
