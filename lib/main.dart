@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
-  runApp(ScreenUtilInit(
+  runApp( ScreenUtilInit(
     designSize: Size(360, 690),
     minTextAdapt: true,
     splitScreenMode: true,

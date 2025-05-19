@@ -42,7 +42,8 @@ class Homepage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
+      appBar: isLandscape
+          ? null:AppBar(
         backgroundColor: Colors.white,
         actions: [
          /* PopupMenuButton<MenuItemModel>(itemBuilder: (context)=>[
