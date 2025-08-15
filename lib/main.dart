@@ -1,9 +1,10 @@
-import 'package:esho_eman_shikhi/screen/HomePage.dart';
+ import 'package:esho_eman_shikhi/screen/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
-  runApp( ScreenUtilInit(
+  runApp(
+      ScreenUtilInit(
     designSize: Size(360, 690),
     minTextAdapt: true,
     splitScreenMode: true,
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
           primary: Colors.white,
             seedColor: Colors.white),
         appBarTheme: AppBarTheme(color: Colors.white),
-        dialogTheme: DialogTheme(backgroundColor: Colors.white,)
+        //dialogTheme: DialogTheme(backgroundColor: Colors.white,)
       ),
      // home: const HomeScreen(),
       home: const Homepage(),

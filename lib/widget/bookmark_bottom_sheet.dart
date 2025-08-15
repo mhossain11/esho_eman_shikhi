@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 
 class BookmarkBottomSheet extends StatefulWidget {
   final List<int> bookmarkedPages;
@@ -19,6 +20,9 @@ class BookmarkBottomSheet extends StatefulWidget {
 
 class _BookmarkBottomSheetState extends State<BookmarkBottomSheet> {
   late List<int> _localBookmarks;
+  DateTime now = DateTime.now();
+  String dateFormate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  String timeFormate = DateFormat('HH:mm a').format(DateTime.now());
 
   @override
   void initState() {
@@ -74,14 +78,23 @@ class _BookmarkBottomSheetState extends State<BookmarkBottomSheet> {
                 child: Card(
                   elevation: 5,
                   color: Colors.white,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("বইয়ের পৃষ্ঠা নাম্বার: ${page+1}",style: TextStyle(fontSize: 20.sp,fontWeight: FontWeight.bold),),
-                      IconButton(
-                        onPressed: () => _deleteBookmark(index),
-                        icon: Icon(Icons.delete),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text("বইয়ের পৃষ্ঠা নাম্বার: ${page+1}",style: TextStyle(fontSize: 20.sp,fontWeight: FontWeight.bold),),
+                          IconButton(
+                            onPressed: () => _deleteBookmark(index),
+                            icon: Icon(Icons.delete),
+                          ),
+                        ],
                       ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 23.0),
+                        child: Text('Date- $dateFormate  Time- $timeFormate',style: TextStyle(color: Colors.grey,fontSize: 14),),
+                      )
                     ],
                   ),
                 ),

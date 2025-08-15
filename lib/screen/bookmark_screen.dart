@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:esho_eman_shikhi/model/save_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'showpdf_screen.dart';
 
@@ -14,6 +18,7 @@ class BookmarkScreen extends StatefulWidget {
 
 class _BookmarkScreenState extends State<BookmarkScreen> {
   late List<int> _bookmarks;
+
 
   @override
   void initState() {
@@ -36,9 +41,11 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
   }
 
 
+
+
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -46,7 +53,44 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
           title: const Text('বুকমার্ক তালিকা',style: TextStyle(fontWeight:FontWeight.bold ),),
           centerTitle: true,
       ),
-      body: _bookmarks.isEmpty ?  Center(child: Text('বইয়ের পৃষ্ঠা বুকমার্ক করা নেই।',style: TextStyle(fontSize: 20.sp),)):
+      body: _bookmarks.isEmpty ?
+      Center(child: Text('বইয়ের পৃষ্ঠা বুকমার্ক করা নেই।',
+        style: TextStyle(fontSize: 20.sp),)):
+      /*ListView.builder(
+        itemCount: _bookmarks.length,
+        itemBuilder: (context, index) {
+          final bookmark = _bookmarks[index];
+          int pageNum = int.tryParse(bookmark) ?? 0;
+
+          return Card(
+            elevation: 5,
+            margin: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+            child: ListTile(
+              title: Text(
+                "বইয়ের পৃষ্ঠা নাম্বার: ${pageNum + 1}",
+                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text(
+                'Date- ${bookmark.date}  Time- ${bookmark.time}',
+                style: TextStyle(color: Colors.grey, fontSize: 14.sp),
+              ),
+              trailing: IconButton(
+                icon: const Icon(Icons.delete),
+                onPressed: () => _deleteBookmark(bookmark),
+              ),
+              onTap: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ShowPdfScreen(initialPage: pageNum),
+                  ),
+                );
+              },
+            ),
+          );
+        },
+      ),*/
+
       ListView(
         children: [
           ..._bookmarks.map((page) {
@@ -77,6 +121,7 @@ class _BookmarkScreenState extends State<BookmarkScreen> {
           }).toList(),
         ],
       ),
+
     );
   }
 }

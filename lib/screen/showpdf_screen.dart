@@ -6,7 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../widget/alert_dialog.dart';
-import '../widget/show_dialog.dart';
+import '../widget/bookmark_bottom_sheet.dart';
 
 class ShowPdfScreen extends StatefulWidget {
   final int initialPage;
@@ -102,13 +102,14 @@ class _ShowPdfScreenState extends State<ShowPdfScreen> {
     }
   }
 
-  void _toggleNightMode() async {
+  //NightMode function
+/*  void _toggleNightMode() async {
     setState(() {
       nightMood = !nightMood;
     });
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('nightMood', nightMood);
-  }
+  }*/
 
 
   Future<void> _loadNightMood() async {
