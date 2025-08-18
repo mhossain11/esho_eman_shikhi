@@ -1,5 +1,4 @@
- class SaveModel{
-
+class SaveModel {
   final String page;
   final String time;
   final String date;

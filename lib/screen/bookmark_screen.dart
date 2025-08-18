@@ -3,125 +3,58 @@ import 'dart:convert';
 import 'package:esho_eman_shikhi/model/save_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import '../controller/data_controller.dart';
 import 'showpdf_screen.dart';
 
-class BookmarkScreen extends StatefulWidget {
-  final List<int> bookmarkedPages;
+class BookmarkScreen extends StatelessWidget {
+  final List<SaveModel> bookmarks;
 
-  const BookmarkScreen({super.key, required this.bookmarkedPages});
-
-  @override
-  State<BookmarkScreen> createState() => _BookmarkScreenState();
-}
-
-class _BookmarkScreenState extends State<BookmarkScreen> {
-  late List<int> _bookmarks;
-
-
-  @override
-  void initState() {
-    super.initState();
-    _bookmarks = List.from(widget.bookmarkedPages); // Copy of original
-  }
-
-  Future<void> _deleteBookmark(int page) async {
-    final prefs = await SharedPreferences.getInstance();
-    List<String> stringList = prefs.getStringList('bookmarkedPages') ?? [];
-
-    // Remove the page from the SharedPreferences list
-    stringList.remove(page.toString());
-    await prefs.setStringList('bookmarkedPages', stringList);
-
-    // Update the local state list
-    setState(() {
-      _bookmarks.remove(page);
-    });
-  }
-
+  const BookmarkScreen({super.key, required this.bookmarks});
 
 
 
 
   @override
   Widget build(BuildContext context) {
+    final controller = Provider.of<DataController>(context);
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-          title: const Text('বুকমার্ক তালিকা',style: TextStyle(fontWeight:FontWeight.bold ),),
-          centerTitle: true,
-      ),
-      body: _bookmarks.isEmpty ?
-      Center(child: Text('বইয়ের পৃষ্ঠা বুকমার্ক করা নেই।',
-        style: TextStyle(fontSize: 20.sp),)):
-      /*ListView.builder(
-        itemCount: _bookmarks.length,
+      appBar: AppBar(title: const Text("বুকমার্ক"),centerTitle: true,),
+      body: bookmarks.isEmpty
+          ? Center(child: Text("বইয়ের পৃষ্ঠা বুকমার্ক করা নেই।",style: TextStyle(fontSize: 20.sp),),)
+          : ListView.builder(
+        itemCount: bookmarks.length,
         itemBuilder: (context, index) {
-          final bookmark = _bookmarks[index];
-          int pageNum = int.tryParse(bookmark) ?? 0;
-
-          return Card(
-            elevation: 5,
-            margin: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-            child: ListTile(
-              title: Text(
-                "বইয়ের পৃষ্ঠা নাম্বার: ${pageNum + 1}",
-                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+          final item = bookmarks[index];
+          return Padding(
+            padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+            child: Card(
+              elevation: 5,
+              child: ListTile(
+                leading: const Icon(Icons.bookmark),
+                title: Text("বইয়ের পৃষ্ঠা: ${int.parse(item.page) + 1}"),
+                subtitle: Text("${item.date} - ${item.time}"),
+                trailing: IconButton(
+                  onPressed: () => controller.removeBookmark(item.page),
+                  icon: const Icon(Icons.delete),
+                ),
+                onTap: (){
+                  print("page: ${item.page}");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ShowPdfScreen(
+                        initialPage: int.tryParse(item.page)!,
+                      ),
+                    ),
+                  );
+                },
               ),
-              subtitle: Text(
-                'Date- ${bookmark.date}  Time- ${bookmark.time}',
-                style: TextStyle(color: Colors.grey, fontSize: 14.sp),
-              ),
-              trailing: IconButton(
-                icon: const Icon(Icons.delete),
-                onPressed: () => _deleteBookmark(bookmark),
-              ),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => ShowPdfScreen(initialPage: pageNum),
-                  ),
-                );
-              },
             ),
           );
         },
-      ),*/
-
-      ListView(
-        children: [
-          ..._bookmarks.map((page) {
-            return GestureDetector(
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => ShowPdfScreen(initialPage: page),
-                  ),
-                );
-              },
-              child: Card(
-                elevation: 5,
-                color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text("বইয়ের পৃষ্ঠা নাম্বার: ${page + 1}",style: TextStyle(fontSize: 20.sp,fontWeight: FontWeight.bold)),
-                    IconButton(
-                      onPressed: () => _deleteBookmark(page),
-                      icon: const Icon(Icons.delete),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }).toList(),
-        ],
       ),
-
     );
   }
 }

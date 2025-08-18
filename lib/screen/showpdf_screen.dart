@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../controller/data_controller.dart';
+import '../model/save_model.dart';
 import '../widget/alert_dialog.dart';
 import '../widget/bookmark_bottom_sheet.dart';
 
@@ -22,16 +25,14 @@ class _ShowPdfScreenState extends State<ShowPdfScreen> {
   int _totalPages = 0;
   String? _filePath;
   bool _isReady = false;
-  final List<int> _bookmarkedPages = [];
-  bool nightMood=false;
+
   final TextEditingController _pageSearchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _loadPdfFromAssets();
-    _loadBookmarks();
-    _loadNightMood();
+
   }
 
   Future<void> _loadPdfFromAssets() async {
@@ -47,75 +48,26 @@ class _ShowPdfScreenState extends State<ShowPdfScreen> {
   void _goToPage(int pageNum) {
     if (_pdfViewController == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('PDF লোড হচ্ছে, একটু অপেক্ষা করুন।')),
+        const SnackBar(content: Text('PDF লোড হচ্ছে, একটু অপেক্ষা করুন।')),
       );
       return;
     }
 
     if (_totalPages == 0) {
-      // এখনও render হয়নি, তাই render শেষে navigate করো
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        Future.delayed(Duration(milliseconds: 300), () {
-          if (_pdfViewController != null) {
-            _pdfViewController!.setPage(pageNum);
-           // print('pageNum (delayed): ${pageNum+1}');
-          }
+        Future.delayed(const Duration(milliseconds: 300), () {
+          _pdfViewController?.setPage(pageNum);
         });
       });
     } else if (pageNum >= 0 && pageNum < _totalPages) {
       _pdfViewController!.setPage(pageNum);
-     // print('pageNum: $pageNum');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('দুঃখিত, এই নাম্বারের কোন পেইজ নেই।')),
+        const SnackBar(content: Text('দুঃখিত, এই নাম্বারের কোন পেইজ নেই।')),
       );
     }
   }
 
-
-  void _toggleBookmark() {
-    setState(() {
-      if (_bookmarkedPages.contains(_currentPage)) {
-        _bookmarkedPages.remove(_currentPage);
-      } else {
-        _bookmarkedPages.add(_currentPage);
-      }
-    });
-    _saveBookmarks();
-  }
-
-  Future<void> _saveBookmarks() async {
-    final prefs = await SharedPreferences.getInstance();
-    List<String> stringList = _bookmarkedPages.map((e) => e.toString()).toList();
-    await prefs.setStringList('bookmarkedPages', stringList);
-  }
-
-  Future<void> _loadBookmarks() async {
-    final prefs = await SharedPreferences.getInstance();
-    List<String>? stringList = prefs.getStringList('bookmarkedPages');
-
-    if (stringList != null) {
-      setState(() {
-        _bookmarkedPages.clear();
-        _bookmarkedPages.addAll(stringList.map((e) => int.parse(e)));
-      });
-    }
-  }
-
-  //NightMode function
-/*  void _toggleNightMode() async {
-    setState(() {
-      nightMood = !nightMood;
-    });
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('nightMood', nightMood);
-  }*/
-
-
-  Future<void> _loadNightMood() async {
-    final prefs = await SharedPreferences.getInstance();
-    nightMood = prefs.getBool('nightMood') ?? false;
-  }
 
 
 
@@ -128,60 +80,60 @@ class _ShowPdfScreenState extends State<ShowPdfScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Provider.of<DataController>(context);
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: nightMood ? Colors.black : Colors.white,
-        iconTheme: IconThemeData(
-          color: nightMood ? Colors.white : Colors.black,
-        ),
+        backgroundColor: Colors.white,
         actions: [
+          // নাইট মোড বাটন
           /*IconButton(
             icon: Icon(
-              nightMood ? Icons.nightlight_outlined
-                  : Icons.nightlight,
+              nightMood ? Icons.nightlight_outlined : Icons.nightlight,
               color: nightMood ? Colors.white : Colors.black,
             ),
-            onPressed: (){
-              _toggleNightMode();
+            onPressed: () {
+              controller.toggleNightMode();
             },
           ),*/
+
+          // বুকমার্ক বাটন
           IconButton(
             icon: Icon(
-              _bookmarkedPages.contains(_currentPage)
+              controller.bookmarks.any((b) => b.page == _currentPage.toString())
                   ? Icons.bookmark
                   : Icons.bookmark_border,
-                color: nightMood ? Colors.white : Colors.black,
+              color: Colors.black ,
             ),
-            onPressed: _toggleBookmark,
+            onPressed: () {
+              controller.toggleBookmarks(_currentPage);
+            },
           ),
+
+          // বুকমার্ক লিস্ট বটমশীট
           IconButton(
-            icon: Icon(Icons.list,
-              color: nightMood ? Colors.white : Colors.black,),
+            icon: Icon(Icons.list, color: Colors.black ),
             onPressed: () {
               showModalBottomSheet(
                 context: context,
                 builder: (context) => BookmarkBottomSheet(
-                  bookmarkedPages: List<int>.from(_bookmarkedPages),
-                  onGoToPage: (int page) async{
+                  bookmarkedPages: controller.bookmarks,
+                  onGoToPage: (int page) {
                     _goToPage(page);
-                    print('Page2 ${page + 1}');
                   },
-                  onBookmarksUpdated: (List<int> updatedList) {
-                    setState(() {
-                      _bookmarkedPages
-                        ..clear()
-                        ..addAll(updatedList);
-                    });
-                    _saveBookmarks();
+                  onBookmarksUpdated: (List<SaveModel> updatedList) {
+                    // Provider দিয়ে update করতে হবে
+                    controller.updateBookmarks(updatedList);
                   },
                 ),
               );
             },
           ),
+
+          // পেইজ সার্চ বাটন
           IconButton(
-            icon: Icon(Icons.search, color: nightMood ? Colors.white : Colors.black,),
+            icon: Icon(Icons.search, color:  Colors.black),
             onPressed: () {
               showDialog(
                 context: context,
@@ -189,7 +141,8 @@ class _ShowPdfScreenState extends State<ShowPdfScreen> {
                   onGoToPage: (int page) {
                     _goToPage(page);
                   },
-                  pageSearchController: _pageSearchController,),
+                  pageSearchController: _pageSearchController,
+                ),
               );
             },
           ),
@@ -197,65 +150,52 @@ class _ShowPdfScreenState extends State<ShowPdfScreen> {
       ),
 
       body: _filePath == null
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : Stack(
-            children: [
-              PDFView(
-                filePath: _filePath!,
-                enableSwipe: true,
-                swipeHorizontal: false,
-                autoSpacing: false,
-                pageFling: false,
-                onRender: (pages){
-                  setState(() {
-                    _totalPages = pages!;
-                    _isReady = true;
-                  });
-                  // Move to the desired initial page after rendering is complete
-                  if (_pdfViewController != null) {
-                    _pdfViewController!.setPage(widget.initialPage);
-                    print('Navigated to initialPage: ${widget.initialPage}');
-                  }
-                },
-                onViewCreated: (controller) {
-                  _pdfViewController = controller;
-                  _goToPage(widget.initialPage);
-                  print('pageInit:${widget.initialPage}');
-                },
-                onPageChanged: (page, total) {
-                  setState(() {
-                    _currentPage = page!;
-                    _totalPages = total!;
-                  });
-                },
-                onError: (error) {
-                  print(error.toString());
-                },
-                onPageError: (page, error) {
-                  print('$page: ${error.toString()}');
-                },
-              ),
-              if (_isReady)
-                Positioned(
-                  bottom: 16,
-                  right: 20,
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: Colors.black54,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        'Page ${_currentPage + 1}',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ),
-            ],
+        children: [
+          PDFView(
+            filePath: _filePath!,
+            enableSwipe: true,
+            swipeHorizontal: false,
+            autoSpacing: false,
+            pageFling: false,
+            onRender: (pages) {
+              setState(() {
+                _totalPages = pages!;
+                _isReady = true;
+              });
+              _pdfViewController?.setPage(widget.initialPage);
+            },
+            onViewCreated: (controllerPDF) {
+              _pdfViewController = controllerPDF;
+              _goToPage(widget.initialPage);
+            },
+            onPageChanged: (page, total) {
+              setState(() {
+                _currentPage = page!;
+                _totalPages = total!;
+              });
+            },
           ),
+          if (_isReady)
+            Positioned(
+              bottom: 16,
+              right: 20,
+              child: Container(
+                padding:
+                const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: Colors.black54,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  'Page ${_currentPage + 1}',
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

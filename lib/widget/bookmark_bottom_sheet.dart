@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
+import '../model/save_model.dart';
+
 class BookmarkBottomSheet extends StatefulWidget {
-  final List<int> bookmarkedPages;
+  final List<SaveModel> bookmarkedPages; // SaveModel list
   final void Function(int page) onGoToPage;
-  final void Function(List<int> updatedList) onBookmarksUpdated;
+  final void Function(List<SaveModel> updatedList) onBookmarksUpdated;
 
   const BookmarkBottomSheet({
     super.key,
@@ -19,15 +21,13 @@ class BookmarkBottomSheet extends StatefulWidget {
 }
 
 class _BookmarkBottomSheetState extends State<BookmarkBottomSheet> {
-  late List<int> _localBookmarks;
-  DateTime now = DateTime.now();
-  String dateFormate = DateFormat('yyyy-MM-dd').format(DateTime.now());
-  String timeFormate = DateFormat('HH:mm a').format(DateTime.now());
+  late List<SaveModel> _localBookmarks;
+
 
   @override
   void initState() {
     super.initState();
-    _localBookmarks = List<int>.from(widget.bookmarkedPages); // local copy
+    _localBookmarks = List<SaveModel>.from(widget.bookmarkedPages);
   }
 
   void _deleteBookmark(int index) {
@@ -36,11 +36,10 @@ class _BookmarkBottomSheetState extends State<BookmarkBottomSheet> {
     });
     widget.onBookmarksUpdated(_localBookmarks);
   }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Container(
+      child:  Container(
         color: Colors.white,
         child: _localBookmarks.isEmpty ? Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -69,34 +68,23 @@ class _BookmarkBottomSheetState extends State<BookmarkBottomSheet> {
             SizedBox(height: 10),
             ..._localBookmarks.asMap().entries.map((entry) {
               int index = entry.key;
-              int page = entry.value;
-              return GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                  widget.onGoToPage(page);
-                },
-                child: Card(
-                  elevation: 5,
-                  color: Colors.white,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text("বইয়ের পৃষ্ঠা নাম্বার: ${page+1}",style: TextStyle(fontSize: 20.sp,fontWeight: FontWeight.bold),),
-                          IconButton(
-                            onPressed: () => _deleteBookmark(index),
-                            icon: Icon(Icons.delete),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 23.0),
-                        child: Text('Date- $dateFormate  Time- $timeFormate',style: TextStyle(color: Colors.grey,fontSize: 14),),
-                      )
-                    ],
+              SaveModel item = entry.value;
+
+              return Card(
+                elevation: 5,
+                child: ListTile(
+                  leading: const Icon(Icons.bookmark),
+                  title: Text("বইয়ের পৃষ্ঠা: ${int.parse(item.page) + 1}"),
+                  subtitle: Text("${item.date} - ${item.time}"),
+                  trailing: IconButton(
+                    onPressed: () => _deleteBookmark(index),
+                    icon: const Icon(Icons.delete),
                   ),
+                  onTap: (){
+                    print("page: ${item.page}");
+                    Navigator.pop(context);
+                    widget.onGoToPage(int.parse(item.page));
+                  },
                 ),
               );
             }).toList(),
@@ -106,3 +94,4 @@ class _BookmarkBottomSheetState extends State<BookmarkBottomSheet> {
     );
   }
 }
+
