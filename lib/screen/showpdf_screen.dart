@@ -4,7 +4,6 @@ import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controller/data_controller.dart';
 import '../model/save_model.dart';
@@ -36,34 +35,72 @@ class _ShowPdfScreenState extends State<ShowPdfScreen> {
   }
 
   Future<void> _loadPdfFromAssets() async {
-    final bytes = await rootBundle.load('assets/pdf/iman.pdf');
-    final dir = await getApplicationDocumentsDirectory();
-    final file = File('${dir.path}/iman.pdf');
-    await file.writeAsBytes(bytes.buffer.asUint8List(), flush: true);
-    setState(() {
-      _filePath = file.path;
-    });
+
+     try{
+
+       // assets থেকে PDF bytes load
+       final bytes = await rootBundle.load('assets/pdf/iman.pdf');
+       //documents directory পাওয়া
+       final dir = await getApplicationDocumentsDirectory();
+       // ফাইল বানানো
+       final file = File('${dir.path}/iman.pdf');
+       //write as bytes
+       await file.writeAsBytes(bytes.buffer.asUint8List(), flush: true);
+
+       //state update
+       if (!mounted) return;
+       setState(() {
+         _filePath = file.path;
+       });
+
+     }catch(e){
+       debugPrint("Error loading PDF: $e");
+     }
   }
 
-  void _goToPage(int pageNum) {
-    if (_pdfViewController == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('PDF লোড হচ্ছে, একটু অপেক্ষা করুন।')),
-      );
-      return;
-    }
+  /*void _goToPage(int pageNum) {
+    try {
+      if (_pdfViewController == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('PDF লোড হচ্ছে, একটু অপেক্ষা করুন।')),
+        );
+        return;
+      }
 
-    if (_totalPages == 0) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Future.delayed(const Duration(milliseconds: 300), () {
-          _pdfViewController?.setPage(pageNum);
+      if (_totalPages == 0) {
+        WidgetsBinding.instance.addPostFrameCallback((_){
+        // যদি এখনও পেজ সংখ্যা detect না হয়, post-frame callback দিয়ে retry
+          Future.delayed(const Duration(milliseconds: 300), () {
+              _pdfViewController?.setPage(pageNum);
+          });
+
         });
+      } else if (pageNum >= 0 && pageNum < _totalPages) {
+        _pdfViewController!.setPage(pageNum);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('দুঃখিত, এই নাম্বারের কোন পেইজ নেই।')),
+        );
+      }
+
+    } catch (e) {
+      debugPrint("Error in _goToPage: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('পেজে যেতে গিয়ে সমস্যা হয়েছে।')),
+      );
+    }
+  }*/
+
+  void _goToPage(int pageNum) {
+    if (_pdfViewController == null || _totalPages == 0) return;
+
+    if (pageNum >= 0 && pageNum < _totalPages) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _pdfViewController?.setPage(pageNum);
       });
-    } else if (pageNum >= 0 && pageNum < _totalPages) {
-      _pdfViewController!.setPage(pageNum);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('দুঃখিত, এই নাম্বারের কোন পেইজ নেই।')),
+        const SnackBar(content: Text('এই নাম্বারের কোন পেইজ নেই।')),
       );
     }
   }
@@ -80,28 +117,18 @@ class _ShowPdfScreenState extends State<ShowPdfScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Provider.of<DataController>(context);
+    final controller = Provider.of<DataController>(context,listen:true );
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         actions: [
-          // নাইট মোড বাটন
-          /*IconButton(
-            icon: Icon(
-              nightMood ? Icons.nightlight_outlined : Icons.nightlight,
-              color: nightMood ? Colors.white : Colors.black,
-            ),
-            onPressed: () {
-              controller.toggleNightMode();
-            },
-          ),*/
-
           // বুকমার্ক বাটন
           IconButton(
             icon: Icon(
-              controller.bookmarks.any((b) => b.page == _currentPage.toString())
+              controller.bookmarks.any((b) =>
+              b.page == _currentPage.toString())
                   ? Icons.bookmark
                   : Icons.bookmark_border,
               color: Colors.black ,
@@ -159,21 +186,32 @@ class _ShowPdfScreenState extends State<ShowPdfScreen> {
             swipeHorizontal: false,
             autoSpacing: false,
             pageFling: false,
+            onError: (error){
+              debugPrint("PDF error: $error");
+            },
+            onPageError: (page, error) {
+              debugPrint("Page error on page $page: $error");
+            },
             onRender: (pages) {
+              // PDF completely loaded
+              if (!mounted) return;
               setState(() {
-                _totalPages = pages!;
+                _totalPages = pages ?? 0;
                 _isReady = true;
               });
-              _pdfViewController?.setPage(widget.initialPage);
+              //_pdfViewController?.setPage(widget.initialPage);
+              // safely go to initial page
+              _goToPage(widget.initialPage);
             },
             onViewCreated: (controllerPDF) {
               _pdfViewController = controllerPDF;
               _goToPage(widget.initialPage);
             },
             onPageChanged: (page, total) {
+              if (!mounted) return;
               setState(() {
-                _currentPage = page!;
-                _totalPages = total!;
+                _currentPage = page ?? 0;
+                _totalPages = total ?? _totalPages;
               });
             },
           ),

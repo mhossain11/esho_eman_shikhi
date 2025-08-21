@@ -1,8 +1,11 @@
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/save_model.dart';
@@ -92,7 +95,7 @@ class DataController extends ChangeNotifier {
         DateFormat('yyyy-MM-dd').format(now),
       );
 
-      bookmarksJson.add(jsonEncode(model.toJson()));
+     bookmarksJson.add(jsonEncode(model.toJson()));
       _bookmarks.add(model);
     }
 
@@ -113,6 +116,7 @@ class DataController extends ChangeNotifier {
     _bookmarks = updatedList;
     notifyListeners();
   }
+
 
 
 }

@@ -1,13 +1,8 @@
 
-import 'package:esho_eman_shikhi/controller/data_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../screen/communication_screen.dart';
-import '../screen/showpdf_screen.dart';
-import '../screen/bookmark_screen.dart';
-import '../widget/buildgriditem.dart';
+import '../widget/background_image.dart';
+import '../widget/gridview_items.dart';
 
 
 class Homepage extends StatelessWidget {
@@ -17,199 +12,27 @@ class Homepage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Provider.of<DataController>(context);
     final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
-
-    /*return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: isLandscape
-          ? null:AppBar(
-        backgroundColor: Colors.white,
-      ),
-
-
-      body: Stack(
-        children: [
-          // Background
-          Container(
-            width: 1.sw,
-            height: 1.sh,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(
-                  isLandscape
-                      ? 'assets/images/landscape_background.png'
-                      : 'assets/images/portrait_background.png',
-                ),
-
-              ),
-            ),
-          ),
-
-          // Grid items
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: isLandscape ? 10.w : 30.w,
-                vertical: isLandscape ? 10.h : 32.h,
-              ),
-              child: SizedBox(
-                width: isLandscape ? 0.5.sw : 0.9.sw,
-                child: GridView.count(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 12.w,
-                  mainAxisSpacing: 5.h,
-                  children: [
-                    //1st button
-                    BuildGridItem(
-                      isLandscape: isLandscape,
-                      icon: 'assets/icon/book.png',
-                      label: 'বই পড়ুন',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const ShowPdfScreen(),
-                          ),
-                        );
-                      },
-                    ),
-
-                    // 2nd button
-                    BuildGridItem(
-                      isLandscape: isLandscape,
-                      icon: 'assets/icon/bookmark.png',
-                      label: 'বুকমার্ক',
-                      onTap: () async {
-                        final prefs = await SharedPreferences.getInstance();
-                        final bookmarks = prefs.getStringList('bookmarkedPages') ?? [];
-                        final bookmarkPages = bookmarks.map((e) =>int.tryParse(e)?? 0).toList();
-
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => BookmarkScreen(bookmarkedPages: bookmarkPages),
-                          ),
-                        );
-                      },
-                    ),
-                    // 3rd button
-                    BuildGridItem(
-                      isLandscape: isLandscape,
-                      icon: 'assets/icon/dots.png',
-                      label: 'যোগাযোগ',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const CommunicationScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );*/
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: isLandscape ? null : AppBar(backgroundColor: Colors.white),
       body: Stack(
         children: [
-          // Background
-          Container(
-            width: 1.sw,
-            height: 1.sh,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(
-                  isLandscape
-                      ? 'assets/images/landscape_background.png'
-                      : 'assets/images/portrait_background.png',
-                ),
-              ),
-            ),
-          ),
+          // Background image
+          BackgroundImage(isLandscape: isLandscape),
 
           // Grid items
           Align(
             alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: isLandscape ? 10.w : 30.w,
-                vertical: isLandscape ? 10.h : 32.h,
-              ),
-              child: SizedBox(
-                width: isLandscape ? 0.5.sw : 0.9.sw,
-                child: GridView.count(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 12.w,
-                  mainAxisSpacing: 5.h,
-                  children: [
-                    // 1st button
-                    BuildGridItem(
-                      isLandscape: isLandscape,
-                      icon: 'assets/icon/book.png',
-                      label: 'বই পড়ুন',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const ShowPdfScreen(),
-                          ),
-                        );
-                      },
-                    ),
-
-                    // 2nd button (বুকমার্ক)
-                    BuildGridItem(
-                      isLandscape: isLandscape,
-                      icon: 'assets/icon/bookmark.png',
-                      label: 'বুকমার্ক',
-                      onTap: () async {
-                        final controller = Provider.of<DataController>(context, listen: false);
-                        await controller.loadBookmarks();
-
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => BookmarkScreen( bookmarks: controller.bookmarks,),
-                          ),
-                        );
-                      },
-                    ),
-
-                    // 3rd button
-                    BuildGridItem(
-                      isLandscape: isLandscape,
-                      icon: 'assets/icon/dots.png',
-                      label: 'যোগাযোগ',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const CommunicationScreen(),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            child: GridViewItems(isLandscape: isLandscape),
           ),
         ],
       ),
     );
   }
 }
+
+
+
+
