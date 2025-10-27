@@ -34,7 +34,7 @@ android {
         applicationId = "com.softkormo.esho_eman_shikhi"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        minSdk = 21
         targetSdk = 36
         versionCode = 7 //Last update 21-9-2025
         versionName = "1.1.0"
