@@ -18,7 +18,7 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace = "com.softkormo.esho_eman_shikhi"
     compileSdk = 36
-    ndkVersion = "28.0.12433566"
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
@@ -36,8 +36,8 @@ android {
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
         targetSdk = 36
-        versionCode = 7 //Last update 21-9-2025
-        versionName = "1.1.0"
+        versionCode = 8  //Last update 14-8-2026
+        versionName = "1.1.1"
 
     }
     signingConfigs {

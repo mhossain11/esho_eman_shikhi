@@ -10,12 +10,12 @@ class CommunicationScreen extends StatefulWidget {
 }
 
 class _CommunicationScreenState extends State<CommunicationScreen> {
+  final whatsappUrl = 'https://wa.me/8801687477579';
   final String phoneNumber= '01687477579';
   final String fbUrl = 'https://www.facebook.com/faysal11hossain';
   final String fbGroupUrl = 'https://www.facebook.com/liberalsoft';
   final String linkedinUrl = 'https://www.linkedin.com/in/syed-faysal-hossain-885826196';
-  final String whatsappUrl = 'https://www.facebook.com/yourPageOrProfile';
-  final String profileUrl = 'https://www.faysalhossain.com/';
+  final String profileUrl = 'https://faysalh.online/';
   final String webSiteUrl = 'https://liberalsoft.net/';
 
 
@@ -69,7 +69,8 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
                         Text('আসসালামু আলাইকুম! সম্মানিত পাঠক-পাঠিকা, আমি এই অ্যাপটি আপনাদের সেবায় তৈরি করেছি। আমি সর্বোচ্চ চেষ্টা করেছি নিরবচ্ছিন্ন সেবা দিতে। তারপরও যদি কোন সমস্যা আপনাদের চোখে পড়ে তাহলে অনুরোধ রইলো আমাকে জানাবেন।আমি সমাধান করার আপ্রাণ চেষ্টা করবো। ইনশাআল্লহ।',
                           textAlign: TextAlign.justify,style: TextStyle(fontSize: 9.sp),),
                         SizedBox(height: 30,),
-                        ElevatedButton(
+
+                        /*ElevatedButton(
                             onPressed: (){
                               _launchUrl(fbGroupUrl);
                             },
@@ -95,11 +96,11 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
                             ),
 
 
-                            child: Text('Our Office Website',style: TextStyle(color: Colors.black),)),
+                            child: Text('Our Office Website',style: TextStyle(color: Colors.black),)),*/
                         SizedBox(height: 20,),
                         ElevatedButton(
                             onPressed: (){
-                              _launchDialer(phoneNumber);
+                              _launchDialer(whatsappUrl);
                             },
 
                             style: ElevatedButton.styleFrom(
@@ -109,7 +110,7 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
                               padding: EdgeInsets.symmetric(horizontal: 24.sp, vertical: 12.sp),
                             ),
 
-                            child: Text('Contact',style: TextStyle(color: Colors.black))),
+                            child:Text("WhatsApp",style: TextStyle(color: Colors.black))),
                         SizedBox(height: 40,),
 
                         Expanded(
@@ -174,7 +175,7 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
                       Text('আসসালামু আলাইকুম! সম্মানিত পাঠক-পাঠিকা, আমি এই অ্যাপটি আপনাদের সেবায় তৈরি করেছি। আমি সর্বোচ্চ চেষ্টা করেছি নিরবচ্ছিন্ন সেবা দিতে। তারপরও যদি কোন সমস্যা আপনাদের চোখে পড়ে তাহলে অনুরোধ রইলো আমাকে জানাবেন।আমি সমাধান করার আপ্রাণ চেষ্টা করবো। ইনশাআল্লহ।',
                         textAlign: TextAlign.justify,style: TextStyle(fontSize: 16.sp),),
                       SizedBox(height: 30,),
-                      ElevatedButton(
+                      /*ElevatedButton(
                           onPressed: (){
                             _launchUrl(fbGroupUrl);
                           },
@@ -200,7 +201,7 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
                           ),
 
 
-                          child: Text('Our Office Website',style: TextStyle(color: Colors.black),)),
+                          child: Text('Our Office Website',style: TextStyle(color: Colors.black),)),*/
                       SizedBox(height: 20,),
                       ElevatedButton(
                           onPressed: (){
@@ -222,10 +223,10 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
                         children: [
                           GestureDetector(
                             onTap: (){
-                              _launchUrl(fbUrl);
-                              print('Facebbok');
+                              _launchUrl(whatsappUrl);
+                              print('WhatsApp');
                             },
-                            child: Image.asset('assets/icon/facebook.png',width: 50,height: 45,),),
+                            child: Image.asset('assets/icon/whatsapp.png',width: 50,height: 45,),),
                           SizedBox(width: 10,),
                           GestureDetector(
                               onTap: (){
