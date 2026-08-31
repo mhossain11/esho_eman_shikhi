@@ -7,6 +7,7 @@ A new Flutter project.
 This project is a starting point for a Flutter application.
 
 1.0.0 - Book App
+
 1.0.1 - add time with bookmark 
 
 1.1.1 - Update book content and text corrections
