@@ -37,8 +37,8 @@ class _HomepageState extends State<Homepage> {
     // Save count.
     await prefs.setInt('app_open_count', openCount);
 
-    // Show popup only for first 3 opens.
-    if (openCount <= 3 && mounted) {
+    // Show popup only for first 10 opens.
+    if (openCount < 10 && mounted) {
       showMyDialog();
     }
   }
