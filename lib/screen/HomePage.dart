@@ -50,7 +50,7 @@ class _HomepageState extends State<Homepage> {
       builder: (context) {
         return AlertDialog(
           title: const Text(
-            'সংশোধনী নোটিশ',
+            'পরিমার্জিত সংস্করণ',
             textAlign: TextAlign.center,
           ),
           shape: RoundedRectangleBorder(
@@ -94,28 +94,6 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
 
-    // return Scaffold(
-    //   backgroundColor: Colors.white,
-    //   appBar: isLandscape ? null : AppBar(backgroundColor: Colors.white),
-    //   body: Stack(
-    //     children: [
-    //       // Background image
-    //       Align(
-    //           alignment: isLandscape
-    //               ? Alignment.center // landscape হলে মাঝখানে আসবে
-    //               : Alignment.topCenter,
-    //           child: BackgroundImage(isLandscape: isLandscape)),
-    //
-    //       // Grid items
-    //       Align(
-    //         alignment: Alignment.bottomCenter,
-    //         child: GridViewItems(isLandscape: isLandscape),
-    //       ),
-    //
-    //       Text('App Version- 1.1.1' )
-    //     ],
-    //   ),
-    // );
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: isLandscape

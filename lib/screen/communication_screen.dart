@@ -70,33 +70,6 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
                           textAlign: TextAlign.justify,style: TextStyle(fontSize: 9.sp),),
                         SizedBox(height: 30,),
 
-                        /*ElevatedButton(
-                            onPressed: (){
-                              _launchUrl(fbGroupUrl);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white, // ✅ background color change
-                              foregroundColor: Colors.grey,
-                              shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                              padding: EdgeInsets.symmetric(horizontal: 24.sp, vertical: 12.sp),
-                            ),
-
-
-                            child: Text('Our Office Facebook Page',style: TextStyle(color: Colors.black),)),
-                        SizedBox(height: 20,),
-                        ElevatedButton(
-                            onPressed: (){
-                              _launchUrl(webSiteUrl);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white, // ✅ background color change
-                              foregroundColor: Colors.grey,
-                              shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                              padding: EdgeInsets.symmetric(horizontal: 24.sp, vertical: 12.sp),
-                            ),
-
-
-                            child: Text('Our Office Website',style: TextStyle(color: Colors.black),)),*/
                         SizedBox(height: 20,),
                         ElevatedButton(
                             onPressed: (){
@@ -175,33 +148,7 @@ class _CommunicationScreenState extends State<CommunicationScreen> {
                       Text('আসসালামু আলাইকুম! সম্মানিত পাঠক-পাঠিকা, আমি এই অ্যাপটি আপনাদের সেবায় তৈরি করেছি। আমি সর্বোচ্চ চেষ্টা করেছি নিরবচ্ছিন্ন সেবা দিতে। তারপরও যদি কোন সমস্যা আপনাদের চোখে পড়ে তাহলে অনুরোধ রইলো আমাকে জানাবেন।আমি সমাধান করার আপ্রাণ চেষ্টা করবো। ইনশাআল্লহ।',
                         textAlign: TextAlign.justify,style: TextStyle(fontSize: 16.sp),),
                       SizedBox(height: 30,),
-                      /*ElevatedButton(
-                          onPressed: (){
-                            _launchUrl(fbGroupUrl);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white, // ✅ background color change
-                            foregroundColor: Colors.grey,
-                            shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                            padding: EdgeInsets.symmetric(horizontal: 24.sp, vertical: 12.sp),
-                          ),
 
-
-                          child: Text('Our Office Facebook Page',style: TextStyle(color: Colors.black),)),
-                      SizedBox(height: 20,),
-                      ElevatedButton(
-                          onPressed: (){
-                            _launchUrl(webSiteUrl);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white, // ✅ background color change
-                            foregroundColor: Colors.grey,
-                            shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                            padding: EdgeInsets.symmetric(horizontal: 24.sp, vertical: 12.sp),
-                          ),
-
-
-                          child: Text('Our Office Website',style: TextStyle(color: Colors.black),)),*/
                       SizedBox(height: 20,),
                       ElevatedButton(
                           onPressed: (){
