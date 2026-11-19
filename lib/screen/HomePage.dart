@@ -128,7 +128,7 @@ class _HomepageState extends State<Homepage> {
 
                 const SizedBox(height: 4),
                 const Text(
-                  'Version - 1.1.2',
+                  'Version - 1.1.3',
                   style: TextStyle(
                     fontSize: 12,
                     color: Colors.grey,
